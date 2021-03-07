@@ -47,7 +47,7 @@ const DrawerContent = (props) => {
           props.navigation.dispatch(
             CommonActions.reset({
               index: 0,
-              routes: [{ name: "Landing" }],
+              routes: [{ name: "Login" }],
             })
           )
         }
@@ -63,7 +63,7 @@ function Home({ username }) {
         <DrawerContent {...props} username={username} />
       )}
       drawerContentOptions={{
-        activeBackgroundColor: "#639CD5",
+        activeBackgroundColor: "#76DC6C",
         activeTintColor: "white",
         inactiveBackgroundColor: "#F1F3F3",
         inactiveTintColor: "black",

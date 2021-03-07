@@ -1,9 +1,9 @@
 import React from "react";
-import Landing from "./screens/Landing";
 import Login from "./screens/Login";
 import Chat from "./screens/Chat";
 import Home from "./screens/Home";
 import Register from "./screens/Register";
+import NewChat from "./screens/NewChat";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -23,12 +23,13 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Landing"
+          initialRouteName="Login"
           screenOptions={{
             headerStyle: {
               height: height * 0.065 + Constants.statusBarHeight,
-              backgroundColor: "#639CD5",
+              backgroundColor: "#76DC6C",
             },
+            title: "Messenger",
             headerTintColor: "white",
             headerTitleStyle: {
               fontWeight: "bold",
@@ -38,18 +39,25 @@ export default function App() {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         >
-          <Stack.Screen
-            name="Landing"
-            component={Landing}
-            options={{ title: "Messenger" }}
-          />
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{ title: "Chat" }}
+          />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen
             name="Home"
             component={Home}
             options={{ title: "Chats" }}
+          />
+          <Stack.Screen
+            name="NewChat"
+            component={NewChat}
+            options={{
+              title: "Start new chat",
+              ...TransitionPresets.ModalSlideFromBottomIOS,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

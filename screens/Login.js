@@ -1,7 +1,13 @@
 import axios from "axios";
 import React from "react";
-import { View, TextInput, Text, ActivityIndicator } from "react-native";
-import { Button } from "react-native-elements";
+import {
+  View,
+  Keyboard,
+  Text,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
+import { Button, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
 import { url } from "../config";
@@ -21,7 +27,21 @@ class Login extends React.Component {
     this.props.dispatch({ type: "SET_USERNAME", payload: "" });
   }
 
+  onCreate() {
+    this.props.navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Register" }],
+      })
+    );
+  }
+
   onSignIn() {
+    Keyboard.dismiss();
+    if (!this.props.username.length || !this.state.password.length) {
+      this.setState({ loginStatus: "Fill in the form" });
+      return;
+    }
     this.setState({ isLoading: true });
     axios
       .post(`${url}/login`, {
@@ -46,53 +66,76 @@ class Login extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <TextInput
+      <View style={{ flex: 1, justifyContent: "center", marginBottom: 50 }}>
+        <Text
           style={{
-            alignSelf: "center",
-            width: "60%",
-            padding: 5,
-            borderWidth: 1,
-            borderColor: "#3D7ECF",
-            borderRadius: 10,
-            margin: 5,
-            fontSize: 20,
+            fontSize: 30,
+            fontWeight: "bold",
+            textAlign: "center",
           }}
-          placeholder="Username"
-          textAlign="center"
+        >
+          Welcome
+        </Text>
+        <Text
+          style={{
+            fontSize: 25,
+            fontWeight: "bold",
+            textAlign: "center",
+            marginBottom: 50,
+            color: "#899088",
+          }}
+        >
+          Sign in to continue
+        </Text>
+        <Input
+          label="Username"
+          labelStyle={{ fontSize: 20 }}
+          containerStyle={{ alignSelf: "center", width: "70%" }}
+          inputStyle={{ fontSize: 20 }}
           value={this.props.username}
           onChangeText={(text) =>
             this.props.dispatch({ type: "SET_USERNAME", payload: text })
           }
         />
-        <TextInput
-          style={{
-            alignSelf: "center",
-            width: "60%",
-            padding: 5,
-            borderWidth: 1,
-            borderColor: "#3D7ECF",
-            borderRadius: 10,
-            margin: 5,
-            fontSize: 20,
-          }}
-          placeholder="Password"
+        <Input
+          label="Password"
+          labelStyle={{ fontSize: 20 }}
           secureTextEntry
-          textAlign="center"
+          containerStyle={{ alignSelf: "center", width: "70%" }}
+          inputStyle={{ fontSize: 20 }}
           value={this.state.password}
           onChangeText={(text) => this.setState({ password: text })}
         />
         <Button
           title="Sign In"
-          containerStyle={{ alignSelf: "center", width: "60%" }}
-          buttonStyle={{ borderRadius: 25 }}
+          raised
+          containerStyle={{
+            alignSelf: "center",
+            width: "60%",
+          }}
+          buttonStyle={{ borderRadius: 25, backgroundColor: "#76DC6C" }}
           onPress={() => this.onSignIn()}
         />
         {this.state.loginStatus && (
-          <Text style={{ alignSelf: "center", fontSize: 15, color: "red" }}>
+          <Text
+            style={{
+              alignSelf: "center",
+              fontSize: 20,
+              color: "red",
+              marginTop: 20,
+            }}
+          >
             {this.state.loginStatus}
           </Text>
         )}
+        <Pressable
+          style={{ marginTop: 50, alignSelf: "center" }}
+          onPress={() => this.onCreate()}
+        >
+          <Text style={{ fontSize: 20, color: "#61CF51", fontWeight: "bold" }}>
+            Create Account
+          </Text>
+        </Pressable>
         {this.state.isLoading && (
           <ActivityIndicator
             size="large"

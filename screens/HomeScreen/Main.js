@@ -11,9 +11,7 @@ import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
 import axios from "axios";
 import Constants from "expo-constants";
-import Modal from "react-native-modal";
 import { url } from "../../config";
-import BottomSheet from "reanimated-bottom-sheet";
 
 const { height } = Dimensions.get("window");
 
@@ -51,7 +49,7 @@ class Main extends React.Component {
   getChats() {
     axios.get(`${url}/get_chats/${this.props.username}`).then((response) => {
       this.props.dispatch({ type: "GET_USERS", payload: response.data });
-      this.setState({ newChat: true });
+      this.props.navigation.navigate("NewChat");
     });
   }
 
@@ -106,7 +104,13 @@ class Main extends React.Component {
                     margin: 5,
                   }}
                 />
-                <Text style={{ textAlign: "center", fontSize: 25, margin: 5 }}>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 25,
+                    margin: 5,
+                  }}
+                >
                   {chat.users.find((user) => user !== this.props.username)}
                 </Text>
               </View>
@@ -122,78 +126,9 @@ class Main extends React.Component {
               bottom: 10,
               right: 10,
             }}
-            color="#639CD5"
+            color="#76DC6C"
             onPress={() => this.getChats()}
           />
-          <Modal
-            isVisible={this.state.newChat}
-            onBackButtonPress={() => this.setState({ newChat: false })}
-            style={{ margin: 0, marginTop: height * 0.2 }}
-            backdropOpacity={0}
-            animationInTiming={500}
-            animationOutTiming={500}
-            hideModalContentWhileAnimating
-            swipeDirection="down"
-            onSwipeComplete={() => this.setState({ newChat: false })}
-          >
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: "#639CD5",
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-              }}
-            >
-              <Text
-                style={{
-                  marginTop: 10,
-                  textAlign: "center",
-                  fontSize: 25,
-                  fontWeight: "bold",
-                  color: "white",
-                }}
-              >
-                Start new chat
-              </Text>
-              {this.props.users.map((user) => (
-                <TouchableOpacity
-                  key={user._id}
-                  style={{
-                    height: "10%",
-                    justifyContent: "center",
-                    backgroundColor: "white",
-                    margin: 5,
-                    borderRadius: 10,
-                  }}
-                  onPress={() => this.onStartChat(user.username)}
-                >
-                  <View style={{ flexDirection: "row" }}>
-                    <Image
-                      source={{
-                        uri:
-                          "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png",
-                      }}
-                      style={{
-                        borderRadius: height * 0.35,
-                        height: height * 0.07,
-                        width: height * 0.07,
-                        margin: 5,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        fontSize: 25,
-                        margin: 5,
-                      }}
-                    >
-                      {user.username}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </Modal>
         </View>
       );
   }

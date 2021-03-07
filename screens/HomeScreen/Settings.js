@@ -27,7 +27,7 @@ class Settings extends React.Component {
           title="Edit profile"
           type="outline"
           containerStyle={{ width: "40%" }}
-          buttonStyle={{ borderRadius: 10 }}
+          buttonStyle={{ borderRadius: 10, color: "#76DC6C" }}
         />
       </View>
     );
